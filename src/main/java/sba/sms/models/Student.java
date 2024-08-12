@@ -26,15 +26,16 @@ import java.util.Set;
 @Entity
 
 public class Student {
-    
+
     @NonNull
-    @Id @Column(length = 50,name = "email")
+    @Id
+    @Column(length = 50, name = "email")
     String email;
     @NonNull
     @Column(length = 50, nullable = false, name = "name")
     String name;
     @NonNull
-    @Column(length = 50,name = "password")
+    @Column(length = 50, name = "password")
     String password;
 
     @ToString.Exclude
@@ -44,7 +45,25 @@ public class Student {
             inverseJoinColumns = @JoinColumn(name = "courses_id"))
     Set<Course> courses = new LinkedHashSet<>();
 
+    public void addCourse(Course c) {
+        courses.add(c);
+        c.getStudents().add(this);
+
+    }
+    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return email.equals(student.email) && name.equals(student.name) && password.equals(student.password);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, name, password);
+    }
 
+}
 
