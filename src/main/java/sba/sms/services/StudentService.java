@@ -133,19 +133,23 @@ public class StudentService implements StudentI {
     }
 
     public List<Student> getAllStudents() {
+        session = factory.openSession();
         Transaction transaction = null;
-
+        List<Student> students = new ArrayList<>();
         try {
-            String hqlString = "SELECT Student from Students";
+            transaction = session.beginTransaction();
+            String hqlString = "from Student";
             Query<Student> query = session.createQuery(hqlString, Student.class);
-            return query.getResultList();
+            transaction.commit();
+            students =query.getResultList();
+            return students;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
                 System.out.println(e);
             }
             System.out.println(e);
-            return null;
+            return students;
         }
     }
 
