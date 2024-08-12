@@ -43,3 +43,41 @@ public class StudentService implements StudentI {
         }
         return studentList;
     }
+
+    @Override
+    public void createStudent(Student student) {
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = s.beginTransaction();
+            s.persist(student);
+            tx.commit();
+        } catch (HibernateException exception) {
+            if (tx != null) tx.rollback();
+            exception.printStackTrace();
+        } finally {
+            s.close();
+        }
+    }
+
+    @Override
+    public Student getStudentByEmail(String email) {
+
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        Student student = null;
+        try {
+            tx = s.beginTransaction();
+            Query<Student> q = s.createQuery("from Student where email = :email", Student.class);
+            q.setParameter("email", email);
+            student = q.getSingleResult();
+            tx.commit();
+
+        } catch (Exception exception) {
+            if (tx != null) tx.rollback();
+            exception.printStackTrace();
+        } finally {
+            s.close();
+        }
+        return student;
+    }
