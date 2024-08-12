@@ -50,7 +50,7 @@ public class Student {
         c.getStudents().add(this);
 
     }
-    
+
 
     @Override
     public boolean equals(Object o) {
