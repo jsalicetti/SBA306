@@ -21,6 +21,10 @@ import java.util.List;
  * generate a logger file.
  */
 
+@Log
+public class StudentService implements StudentI {
+    private static final CourseService courseService = new CourseService();
+
 public class StudentService {
 
 }
