@@ -17,6 +17,14 @@ import java.util.Set;
  * Implement Lombok annotations to eliminate boilerplate code.
  */
 
+@Setter@Getter@ToString
+@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "student")
+@Entity
+
 public class Student {
 
 
