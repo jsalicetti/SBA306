@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -17,53 +18,77 @@ import java.util.Set;
  * Implement Lombok annotations to eliminate boilerplate code.
  */
 
-@Setter@Getter@ToString
-@RequiredArgsConstructor
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "student")
 @Entity
-
+@Table(name = "Student")
 public class Student {
 
-    @NonNull
     @Id
     @Column(length = 50, name = "email")
-    String email;
-    @NonNull
-    @Column(length = 50, nullable = false, name = "name")
-    String name;
-    @NonNull
+    private String email;
+
+    @Column(length = 50, name = "name")
+    private String name;
+
     @Column(length = 50, name = "password")
-    String password;
+    private String password;
 
-    @ToString.Exclude
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
-    @JoinTable(name = "student_courses",
-            joinColumns = @JoinColumn(name = "student_email"),
-            inverseJoinColumns = @JoinColumn(name = "courses_id"))
-    Set<Course> courses = new LinkedHashSet<>();
+    @ManyToMany(targetEntity = Course.class, fetch = FetchType.EAGER, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST} )
+    @JoinTable(name = "students_courses", joinColumns = @JoinColumn(name = "student_email"), inverseJoinColumns = @JoinColumn(name = "courses_id"))
+    private Set<Course> courses = new HashSet<>();
 
-    public void addCourse(Course c) {
-        courses.add(c);
-        c.getStudents().add(this);
 
+    Student() {
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Student student = (Student) o;
-        return email.equals(student.email) && name.equals(student.name) && password.equals(student.password);
+    Student(String email, String name, String password, Set<Course> Courses) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.courses = courses;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(email, name, password);
+    public Student(String email, String name, String password) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
     }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Course> getCourses() {
+        return this.courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
+
 
 }
 

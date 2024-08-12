@@ -16,23 +16,14 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
  *  <b style="color:red">WARNING! </b>
  *  <b>DO NOT MODIFY THIS CODE</b>
  */
+
 public class HibernateUtil {
     private HibernateUtil() {
         // Utility classes should not have public constructors
     }
-
-    /**
-     * @Getter builds a standard getter method for the object
-     * sessionFactory.
-     */
-    @Getter
+@Getter
     private static SessionFactory sessionFactory = buildSessionFactory();
 
-    /**
-     * Method builds a session factory from the 'hibernate.cfg.xml' file
-     * in the 'resources' folder and returns a sessionFactory object.
-     * @return
-     */
     private static SessionFactory buildSessionFactory()
     {
         try
@@ -54,12 +45,12 @@ public class HibernateUtil {
         }
     }
 
-    /**
-     * Closes the session factory.
-     */
     public static void shutdown() {
         getSessionFactory().close();
     }
 
 
 }
+
+
+
