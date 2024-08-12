@@ -26,7 +26,23 @@ import java.util.Set;
 @Entity
 
 public class Student {
+    
+    @NonNull
+    @Id @Column(length = 50,name = "email")
+    String email;
+    @NonNull
+    @Column(length = 50, nullable = false, name = "name")
+    String name;
+    @NonNull
+    @Column(length = 50,name = "password")
+    String password;
 
+    @ToString.Exclude
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
+    @JoinTable(name = "student_courses",
+            joinColumns = @JoinColumn(name = "student_email"),
+            inverseJoinColumns = @JoinColumn(name = "courses_id"))
+    Set<Course> courses = new LinkedHashSet<>();
 
     }
 
